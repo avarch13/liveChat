@@ -1,17 +1,22 @@
 package com.liveChat.liveChat.models;
 
-import lombok.Getter;
-import lombok.Setter;
+import java.util.Date;
 
-@Getter
-@Setter
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+
+@Data
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
+
 public class ChatMessage {
 
     private String content;
-    private String sender;
+    private String user;
+    private Date timestamp;
 
-    // I could also have used @NoArgsContructor from lombok, but I forgot
-    public ChatMessage() {
-
-    }
 }

@@ -21,6 +21,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     //not where messages are sent, just the client connection
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry){
-        registry.addEndpoint("/ws").setAllowedOriginPatterns("*").withSockJS();
+        registry.addEndpoint("/ws")
+                .setAllowedOriginPatterns("*")
+                .withSockJS();
     }
 }
