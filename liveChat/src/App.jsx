@@ -7,7 +7,7 @@ import { TextField, Button, List, ListItem, Typography } from '@mui/material';
 export default function App() {
   const [user, setUser] = useState('');
   const [client, setClient] = useState(null);
-  const [message, setMessage] = useState("");
+  const [content, setContent] = useState("");
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
@@ -35,10 +35,10 @@ export default function App() {
   }, []);
 
   const sendMessage = () => {
-    if(client && message.trim() && user.trim()) {
-      const chatMessage = {user, message};
+    if(client && content.trim() && user.trim()) {
+      const chatMessage = {user, content};
       client.publish({destination: '/app/chat', body: JSON.stringify(chatMessage)});
-      setMessage('');//clear box
+      setContent('');//clear box
     }
   };
 
@@ -52,7 +52,7 @@ export default function App() {
         {messages.map((msg, index) => (
           <ListItem key={index}>
             <Typography variant="body1">
-              <strong>{msg.user}:</strong> {msg.message} ({msg.timestamp})
+              <strong>{msg.user}:</strong> {msg.content} ({msg.timestamp})
             </Typography>
           </ListItem>
         ))}
@@ -67,8 +67,8 @@ export default function App() {
         <TextField
         label="Message"
         fullWidth
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
+        value={content}
+        onChange={(e) => setContent(e.target.value)}
         margin="normal"
         />
         <Button variant="contained" color="primary" onClick={sendMessage} fullWidth>
@@ -78,3 +78,7 @@ export default function App() {
   );
 };
 
+
+//debug
+//<strong>{msg.user}:</strong> {msg.message} ({msg.timestamp})
+//<pre>{JSON.stringify(msg, null, 2)}</pre>
