@@ -38,9 +38,24 @@ export default function App() {
     if(client && content.trim() && user.trim()) {
       const chatMessage = {user, content};
       client.publish({destination: '/app/chat', body: JSON.stringify(chatMessage)});
+      saveMessage(chatMessage); //Save to DB
       setContent('');//clear box
     }
   };
+
+  const saveMessage = async (message) => { //didn't work
+    const response = await fetch('http://localhost:8080/api/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(message),
+    });
+    if (!response.ok) {
+      console.error('Failed to save message:', response.statusText);
+    }
+    return response.json();
+  }
 
 
   return (
