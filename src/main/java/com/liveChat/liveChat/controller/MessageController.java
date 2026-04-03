@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 
@@ -27,8 +27,10 @@ public class MessageController {
 
     @MessageMapping("/chat")
     @SendTo("/topic/messages") // send the message to all clients sub to topic/public via broker
-    public ChatMessage sendMessage(@Payload ChatMessage message) {
-        message.setTimestamp(new Date());
+    public ChatMessageEntity sendMessage(@Payload ChatMessageEntity message) {
+        message.setTimestamp(new Date().toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDateTime());
+        saveMessage(message);
+        
         //spring auto converts json to object (ChatMessage) so I don't need to manually parse
         return message;
     }

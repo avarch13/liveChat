@@ -5,7 +5,7 @@ import { TextField, Button, List, ListItem, Typography } from '@mui/material';
 
 
 export default function App() {
-  const [user, setUser] = useState('');
+  const [username, setUsername] = useState('');
   const [client, setClient] = useState(null);
   const [content, setContent] = useState("");
   const [messages, setMessages] = useState([]);
@@ -35,15 +35,15 @@ export default function App() {
   }, []);
 
   const sendMessage = () => {
-    if(client && content.trim() && user.trim()) {
-      const chatMessage = {user, content};
+    if(client && content.trim() && username.trim()) {
+      const chatMessage = {username, content};
       client.publish({destination: '/app/chat', body: JSON.stringify(chatMessage)});
-      saveMessage(chatMessage); //Save to DB
+      //saveMessage(chatMessage); //Save to DB
       setContent('');//clear box
     }
   };
 
-  const saveMessage = async (message) => { //didn't work
+  const saveMessage = async (message) => { //didn't work || so I don't need to do this anyway since controller in spring is saving to db
     const response = await fetch('http://localhost:8080/api/messages', {
       method: 'POST',
       headers: {
@@ -67,7 +67,7 @@ export default function App() {
         {messages.map((msg, index) => (
           <ListItem key={index}>
             <Typography variant="body1">
-              <strong>{msg.user}:</strong> {msg.content} ({msg.timestamp})
+              <strong>{msg.username}:</strong> {msg.content} ({msg.timestamp})
             </Typography>
           </ListItem>
         ))}
@@ -75,8 +75,8 @@ export default function App() {
       <TextField
         label="Username"
         fullWidth
-        value={user}
-        onChange={(e) => setUser(e.target.value)}
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
         margin="normal"
         />
         <TextField
