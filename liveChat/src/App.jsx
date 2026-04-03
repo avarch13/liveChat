@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import SockJS from 'sockjs-client';
+import Avatar from '@mui/material/Avatar';
+//import Stack from '@mui/material/Stack';
+import Divider from '@mui/material/Divider';
+import ListItemText from '@mui/material/ListItemText';
 import { Client } from '@stomp/stompjs';
-import { TextField, Button, List, ListItem, Typography } from '@mui/material';
+import { TextField, Button, List, ListItem, Typography, ListItemAvatar } from '@mui/material';
 
 
 export default function App() {
@@ -11,6 +15,21 @@ export default function App() {
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
+
+    const fetchLast10Messages = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/api/messages/last10');
+        //console.log(await response.text());
+        const data = await response.json();
+        setMessages(data);
+        console.log("Fetched last 10 messages:", data); // Remove or guard with a debug flag in production
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchLast10Messages();
+
     const socket = new SockJS('http://localhost:8080/ws'); //Connect
     const stompClient = new Client({
       webSocketFactory: () => socket,
@@ -34,6 +53,18 @@ export default function App() {
     }
   }, []);
 
+  // const fetchLast10Messages = async () => {
+  //   try {
+  //     const response = await fetch('http://localhost:8080/api/messages/last10');
+  //     if (!response.ok) {
+  //       throw new Error(`HTTP error! status: ${response.status}`);
+  //     }
+  //     const data = await response.json();
+  //     setMessages(data.reverse()); //Reverse to show oldest first
+  //   } catch (error) {
+  //     console.error('Error fetching messages:', error);
+  //   };
+
   const sendMessage = () => {
     if(client && content.trim() && username.trim()) {
       const chatMessage = {username, content};
@@ -55,7 +86,62 @@ export default function App() {
       console.error('Failed to save message:', response.statusText);
     }
     return response.json();
+  };
+
+  
+
+  const style = {
+  py: 0,
+  width: '100%',
+  maxWidth: 360,
+  maxHeight: '60vh',
+  overflow: 'auto',
+  borderRadius: 2,
+  border: '1px solid',
+  borderColor: 'divider',
+  backgroundColor: 'background.paper',
+  };
+
+  
+
+  function stringToColor(string) {
+  let hash = 0;
+  let i;
+
+  /* eslint-disable no-bitwise */
+  for (i = 0; i < string.length; i += 1) {
+    hash = string.charCodeAt(i) + ((hash << 5) - hash);
   }
+
+  let color = '#';
+
+  for (i = 0; i < 3; i += 1) {
+    const value = (hash >> (i * 8)) & 0xff;
+    color += `00${value.toString(16)}`.slice(-2);
+  }
+  /* eslint-enable no-bitwise */
+
+  return color;
+  }
+
+function stringAvatar(name) {
+  if (!name || typeof name !== "string") {
+    return { children: "?" };
+  }
+
+  const parts = name.split(" ");
+
+  return {
+    sx: {
+      bgcolor: stringToColor(name),
+    },
+    children: parts.length > 1
+      ? `${parts[0][0]}${parts[1][0]}`
+      : `${parts[0][0]}`,
+  };
+  }
+
+
 
 
   return (
@@ -63,13 +149,24 @@ export default function App() {
       <Typography variant="h4" gutterBottom>
         Live Chat
       </Typography>
-      <List>
+      <List sx={style}>
         {messages.map((msg, index) => (
+          
           <ListItem key={index}>
-            <Typography variant="body1">
+           
+            <ListItemAvatar>
+              <Avatar>
+                <Avatar {...stringAvatar(msg.username)} />
+              </Avatar>
+            </ListItemAvatar>
+            <ListItemText primary={msg.username} secondary={msg.content} />
+            {/* <Typography variant="body1">
               <strong>{msg.username}:</strong> {msg.content} ({msg.timestamp})
-            </Typography>
+            </Typography> */}
+        
           </ListItem>
+          
+
         ))}
       </List>
       <TextField
@@ -92,8 +189,3 @@ export default function App() {
     </div>
   );
 };
-
-
-//debug
-//<strong>{msg.user}:</strong> {msg.message} ({msg.timestamp})
-//<pre>{JSON.stringify(msg, null, 2)}</pre>

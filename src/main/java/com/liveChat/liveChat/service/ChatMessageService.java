@@ -32,4 +32,7 @@ public class ChatMessageService {
         return chatMessageRepository.findAll();
     }
     
+    public List<ChatMessageEntity> getMessagesLast10() {
+        return chatMessageRepository.findTop10ByOrderByTimestampDesc();
+    }
 }
