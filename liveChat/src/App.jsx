@@ -146,9 +146,7 @@ function stringAvatar(name) {
 
   return (
     <div style={{ maxWidth: 600, margin: "0 auto", padding: 20 }}>
-      <Typography variant="h4" gutterBottom>
-        Live Chat
-      </Typography>
+      
       <List sx={style}>
         {messages.map((msg, index) => (
           
