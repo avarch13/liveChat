@@ -1,6 +1,5 @@
 package com.liveChat.liveChat.controller;
 
-import com.liveChat.liveChat.models.ChatMessage;
 import com.liveChat.liveChat.models.ChatMessageEntity;
 import com.liveChat.liveChat.service.ChatMessageService;
 
@@ -17,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 

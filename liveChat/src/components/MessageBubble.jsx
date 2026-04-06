@@ -15,24 +15,27 @@ const MessageBubble = ({ message, isSent }) => {
       sx={{
         display: 'flex',
         justifyContent: isSent ? 'flex-start' : 'flex-end',
-        mb: 1, // spacing between messages
+        mb: 2, // spacing between messages
       }}
     >
       <Box
         sx={{
           maxWidth: '70%',
           minWidth: '30%',
-          p: 1.5,
+          p: 1.7,
           borderRadius: 2,
+          
           // Customizing corners to mimic the "tail"
           borderTopRightRadius: isSent ? 2 : 0,
           borderTopLeftRadius: isSent ? 0 : 2,
           backgroundColor: isSent ? '#dcf8c6' : '#ffffff',
-          boxShadow: 1,
+          boxShadow: 2,
         }}
       >
         <Typography variant="h6">{message.username}</Typography>
-        <Typography variant="body1">{message.content}</Typography>
+        <Typography sx={{ wordWrap: 'break-word' }} variant="body2">
+          {message.content}
+        </Typography>
         <Typography 
           variant="caption" 
           sx={{ display: 'block', textAlign: 'right', mt: 0.5, color: 'text.secondary' }}

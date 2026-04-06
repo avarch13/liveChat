@@ -18,12 +18,12 @@ export default function AppBarCustom () {
                     edge="start"
                     color="inherit"
                     aria-label="menu"
-                    sx={{ mr: 2 }}
+                    sx={{ mr: 2, color: 'green' }}
                 >
                     <MenuIcon />
                 </IconButton>
-                <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                    Live Chat
+                <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
+                    liveChat
                 </Typography>
                 <Button color="inherit">Login</Button>
             </Toolbar>
