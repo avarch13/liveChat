@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import SockJS from 'sockjs-client';
 import Avatar from '@mui/material/Avatar';
-//import Stack from '@mui/material/Stack';
+import Stack from '@mui/material/Stack';
 import Divider from '@mui/material/Divider';
 import ListItemText from '@mui/material/ListItemText';
 import { Client } from '@stomp/stompjs';
+import MessageBubble from './components/MessageBubble';
 import { TextField, Button, List, ListItem, Typography, ListItemAvatar } from '@mui/material';
 
 
@@ -13,6 +14,19 @@ export default function App() {
   const [client, setClient] = useState(null);
   const [content, setContent] = useState("");
   const [messages, setMessages] = useState([]);
+  const scrollRef = useRef(null);
+
+  var isSent = (message) => message.username === username; // Determine if the message was sent by the current user
+
+  const scrollToBottom = () => {
+    
+    scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
+    
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   useEffect(() => {
 
@@ -22,7 +36,7 @@ export default function App() {
         //console.log(await response.text());
         const data = await response.json();
         setMessages(data);
-        console.log("Fetched last 10 messages:", data); // Remove or guard with a debug flag in production
+        //console.log("Fetched last 10 messages:", data); // Remove or guard with a debug flag in production
       } catch (error) {
         console.log(error);
       }
@@ -91,15 +105,8 @@ export default function App() {
   
 
   const style = {
-  py: 0,
-  width: '100%',
-  maxWidth: 360,
-  maxHeight: '60vh',
-  overflow: 'auto',
-  borderRadius: 2,
-  border: '1px solid',
-  borderColor: 'divider',
-  backgroundColor: 'background.paper',
+    maxHeight: '600px',
+    overflow: 'auto',
   };
 
   
@@ -147,25 +154,14 @@ function stringAvatar(name) {
   return (
     <div style={{ maxWidth: 600, margin: "0 auto", padding: 20 }}>
       
-      <List sx={style}>
+      <List sx={style} >
+        
         {messages.map((msg, index) => (
           
-          <ListItem key={index}>
-           
-            <ListItemAvatar>
-              <Avatar>
-                <Avatar {...stringAvatar(msg.username)} />
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText primary={msg.username} secondary={msg.content} />
-            {/* <Typography variant="body1">
-              <strong>{msg.username}:</strong> {msg.content} ({msg.timestamp})
-            </Typography> */}
-        
-          </ListItem>
-          
-
+            <MessageBubble key={index} message={msg} isSent={isSent(msg)} />
+            
         ))}
+        <div ref={scrollRef} />
       </List>
       <TextField
         label="Username"
