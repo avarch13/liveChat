@@ -48,4 +48,5 @@ public class ChatMessageEntity {
     protected void onCreate() {
         this.timestamp = LocalDateTime.now();
     }
+
 }

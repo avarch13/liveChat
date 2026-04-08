@@ -1,5 +1,7 @@
 package com.liveChat.liveChat.dto;
 
-public record MessageDTO() {
+import java.util.Date;
+
+public record MessageDTO(String username, String content, Date timestamp) {
 
 }
